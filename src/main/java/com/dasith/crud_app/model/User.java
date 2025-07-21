@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -121,5 +122,19 @@ public class User implements UserDetails {
 
     public enum Role {
         USER, ADMIN
+    }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusinessDetails> businesses = new ArrayList<>();
+
+    // Helper methods for maintaining the relationship
+    public void addBusiness(BusinessDetails business) {
+        businesses.add(business);
+        business.setUser(this);
+    }
+
+    public void removeBusiness(BusinessDetails business) {
+        businesses.remove(business);
+        business.setUser(null);
     }
 }

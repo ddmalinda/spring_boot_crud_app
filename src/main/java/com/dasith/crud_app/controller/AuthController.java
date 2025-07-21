@@ -4,6 +4,8 @@ import com.dasith.crud_app.dto.*;
 import com.dasith.crud_app.model.User;
 import com.dasith.crud_app.service.AuthService;
 import com.dasith.crud_app.util.JwtUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
         try {
             String token = authService.authenticateUser(request.getEmail(), request.getPassword());
             User user = authService.getUserByEmail(request.getEmail());
@@ -60,6 +62,19 @@ public class AuthController {
                     user.getFirstName(),
                     user.getLastName()
             );
+            // 2. Create the cookie 🍪
+            Cookie jwtCookie = new Cookie("access_token", refreshToken);
+
+            jwtCookie.setHttpOnly(true); // Prevents JavaScript from accessing the cookie
+            jwtCookie.setSecure(true); // Ensures the cookie is sent only over HTTPS
+            jwtCookie.setPath("/"); // The cookie is available to all paths
+            jwtCookie.setMaxAge(24 * 60 * 60*7); // 1 day in seconds
+
+            // For enhanced security against CSRF, consider setting SameSite
+            // jwtCookie.setAttribute("SameSite", "Strict");
+
+            // 3. Add the cookie to the response
+            response.addCookie(jwtCookie);
 
             return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
@@ -109,6 +124,8 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+
+
         try {
             String newToken = authService.refreshToken(request.getRefreshToken());
             return ResponseEntity.ok(new ApiResponse(true, "Token refreshed successfully", newToken));

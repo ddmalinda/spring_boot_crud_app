@@ -14,16 +14,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 @Component
 public class JwtUtil {
 
     @Value("${jwt.secret:myDefaultSecretKeyThatIsAtLeast256BitsLongForHMACAlgorithm}")
     private String secret;
 
-    @Value("${jwt.expiration:86400000}") // 24 hours in milliseconds
+    @Value("${jwt.expiration}") // 24 hours in milliseconds
     private Long jwtExpiration;
 
-    @Value("${jwt.refresh-expiration:604800000}") // 7 days in milliseconds
+    @Value("${jwt.refresh-expiration}") // 7 days in milliseconds
     private Long refreshExpiration;
 
     private SecretKey getSigningKey() {
