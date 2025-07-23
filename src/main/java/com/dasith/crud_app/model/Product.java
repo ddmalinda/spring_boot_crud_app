@@ -1,10 +1,15 @@
 package com.dasith.crud_app.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data // Lombok annotation to generate getters, setters, toString, etc.
+@Table(name = "products")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -16,9 +21,9 @@ public class Product {
     private String  category;
     private Integer stock;
 
-    // Many products belong to one business
+    // Many Products can belong to one Business.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "business_id")
-    private BusinessDetails business;
+    @JoinColumn(name = "business_id") // Foreign key column.
+    private Business business;
     
 }

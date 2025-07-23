@@ -1,5 +1,6 @@
 package com.dasith.crud_app.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -124,17 +124,7 @@ public class User implements UserDetails {
         USER, ADMIN
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BusinessDetails> businesses = new ArrayList<>();
-
-    // Helper methods for maintaining the relationship
-    public void addBusiness(BusinessDetails business) {
-        businesses.add(business);
-        business.setUser(this);
-    }
-
-    public void removeBusiness(BusinessDetails business) {
-        businesses.remove(business);
-        business.setUser(null);
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Business> businesses;
 }
