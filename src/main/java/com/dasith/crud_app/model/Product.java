@@ -1,5 +1,6 @@
 package com.dasith.crud_app.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Product {
     // Many Products can belong to one Business.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id") // Foreign key column.
+    @JsonBackReference
     private Business business;
     
 }

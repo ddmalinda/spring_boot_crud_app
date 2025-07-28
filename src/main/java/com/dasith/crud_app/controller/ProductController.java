@@ -1,6 +1,7 @@
 package com.dasith.crud_app.controller;
 
 import com.dasith.crud_app.model.Product;
+import com.dasith.crud_app.service.BusinessService;
 import com.dasith.crud_app.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/users/{userId}/businesses/{businessId}/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
@@ -30,14 +31,15 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ResponseEntity<Product> createProduct(@PathVariable Long businessId,@RequestBody Product product) {
+        Product createProduct=productService.createProductForBusiness(businessId, product);
+        return ResponseEntity.ok(createProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         try {
-            return ResponseEntity.ok(productService.updateProduct(id, productDetails));
+            return ResponseEntity.ok(productService.updateProduct(id, product));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

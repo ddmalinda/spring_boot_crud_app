@@ -1,6 +1,8 @@
 package com.dasith.crud_app.service;
 
+import com.dasith.crud_app.model.Business;
 import com.dasith.crud_app.model.Product;
+import com.dasith.crud_app.repository.BusinessRepository;
 import com.dasith.crud_app.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+    @Autowired
+    private BusinessRepository businessRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -22,7 +26,15 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Product createProduct(Product product) {
+    public Product createProductForBusiness(Long businessId,Product product) {
+        // Find the business by their id
+        Business business=businessRepository.findById(businessId)
+                .orElseThrow(()->new RuntimeException("Business not Found with id"+businessId));
+
+        //Associate the product with the found business
+        product.setBusiness(business);
+
+        // The repository handles saving and updating the relationship.
         return productRepository.save(product);
     }
 
@@ -33,6 +45,8 @@ public class ProductService {
         product.setName(productDetails.getName());
         product.setDescription(productDetails.getDescription());
         product.setPrice(productDetails.getPrice());
+        product.setCategory(productDetails.getCategory());
+        product.setStock(productDetails.getStock());
 
         return productRepository.save(product);
     }

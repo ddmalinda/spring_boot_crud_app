@@ -1,6 +1,7 @@
 package com.dasith.crud_app.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class Business {
 
     // One Business has many Products.
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Product> products;
 
     // One Business has one AI Agent.
