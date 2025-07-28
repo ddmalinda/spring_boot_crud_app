@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users/{userId}/businesses/{businessId}/products")
+@RequestMapping("/api/businesse/{businessId}/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
@@ -19,15 +19,10 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return productService.getProductById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<Product>> getProductsForBusiness(@PathVariable Long businessId) {
+        // Note: Assuming your service returns a List<Product>
+        List<Product> products = productService.getProductsByBusinessId(businessId);
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping

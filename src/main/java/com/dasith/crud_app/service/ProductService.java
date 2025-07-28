@@ -18,6 +18,10 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public List<Product> getProductsByBusinessId(Long businessId){
+        return productRepository.findByBusinessId(businessId);
+    }
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
