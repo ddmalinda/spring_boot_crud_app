@@ -2,7 +2,9 @@ package com.dasith.crud_app.controller;
 
 import com.dasith.crud_app.model.Business;
 
+import com.dasith.crud_app.model.Product;
 import com.dasith.crud_app.service.BusinessService;
+import com.dasith.crud_app.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,13 @@ public class BusinessController {
     @Autowired
     private BusinessService businessService;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping
-    public List<Business> getBusiness(){
-        return businessService.getAllBusiness();
+    public ResponseEntity<List<Business>> getBusiness(@PathVariable Long userId){
+        List<Business> businesses=businessService.getBusinessByUserId(userId);
+        return ResponseEntity.ok(businesses);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +52,7 @@ public class BusinessController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBusinessDetails(@PathVariable Long id){
         businessService.deteleBusiness(id);
+        productService.deleteProductByBusinessId(id);
         return ResponseEntity.noContent().build();
     }
-
 }

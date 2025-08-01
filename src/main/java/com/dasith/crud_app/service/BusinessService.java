@@ -52,4 +52,8 @@ public class BusinessService {
     public void deteleBusiness(Long id) {
         businessRepository.deleteById(id);
     }
+
+    public List<Business> getBusinessByUserId(Long userId) {
+        return businessRepository.findByUserId(userId);
+    }
 }

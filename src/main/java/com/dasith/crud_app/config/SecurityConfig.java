@@ -58,9 +58,10 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll() // If using H2 for testing
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/aiagent/**").permitAll()
+                    .requestMatchers("/api/public/**").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll() // If using H2 for testing
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())
