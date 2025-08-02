@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/aiagent")
+@RequestMapping("/api/aiagent/{businessId}")
 @CrossOrigin(origins = "*")
 public class AIAgentController {
     @Autowired
@@ -20,8 +20,7 @@ public class AIAgentController {
     public record UserRequest(String prompt) {}
 
     @PostMapping("/generate")
-    public Mono<String> generateContent(@RequestBody UserRequest userRequest) {
-        return geminiService.getGeminiResponse(userRequest.prompt());
+    public Mono<String> generateContent(@RequestBody UserRequest userRequest,@PathVariable Long businessId) {
+        return geminiService.getGeminiResponse(userRequest.prompt(),businessId);
     }
-
 }
