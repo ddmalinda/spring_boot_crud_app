@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class UserProfileResponse {
-    private Long id;
+    private Long userId;
     private String email;
     private String firstName;
     private String lastName;
